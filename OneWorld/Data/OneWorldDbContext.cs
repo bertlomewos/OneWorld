@@ -1,0 +1,11 @@
+﻿using Microsoft.EntityFrameworkCore;
+using OneWorld.Model;
+namespace OneWorld.Data
+{
+    public class OneWorldDbContext : DbContext
+    {
+
+        public OneWorldDbContext(DbContextOptions<OneWorldDbContext> options) : base(options) { }
+        public DbSet<Developer> Developers => Set<Developer>();
+    }
+}
