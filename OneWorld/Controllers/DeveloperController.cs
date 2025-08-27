@@ -51,7 +51,6 @@ namespace OneWorld.Controllers
                 Age = developerDto.Age,
                 Gender = developerDto.Gender
             };
-            existingUser.UserId = Guid.NewGuid();
             _logger.Developers.Add(existingUser);
             await _logger.SaveChangesAsync();
             return CreatedAtAction(nameof(GetUser), new { userId = existingUser.UserId }, existingUser);

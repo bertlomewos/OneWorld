@@ -12,8 +12,8 @@ using OneWorld.Data;
 namespace OneWorld.Migrations
 {
     [DbContext(typeof(OneWorldDbContext))]
-    [Migration("20250826200625_Intit")]
-    partial class Intit
+    [Migration("20250827061153_inti")]
+    partial class inti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,12 +43,20 @@ namespace OneWorld.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<string>("Gender")
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
                     b.Property<string>("GitHubUrl")
                         .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("LinkedInUrl")
                         .HasColumnType("text");
@@ -62,10 +70,6 @@ namespace OneWorld.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 

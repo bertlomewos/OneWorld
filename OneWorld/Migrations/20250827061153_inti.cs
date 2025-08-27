@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace OneWorld.Migrations
 {
     /// <inheritdoc />
-    public partial class Intit : Migration
+    public partial class inti : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +24,8 @@ namespace OneWorld.Migrations
                     ProfilePictureUrl = table.Column<string>(type: "text", nullable: true),
                     GitHubUrl = table.Column<string>(type: "text", nullable: true),
                     LinkedInUrl = table.Column<string>(type: "text", nullable: true),
-                    UserName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     Age = table.Column<int>(type: "integer", nullable: true),
                     Gender = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
