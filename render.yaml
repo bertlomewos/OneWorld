@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: OneWorld-api
+    env: dotnet
+    rootDir: OneWorld
+    buildCommand: dotnet publish OneWorld/OneWorld.csproj -c Release -o out
+    startCommand: dotnet out/OneWorld.dll
+    envVars:
+      - key: DOTNET_RUNNING_IN_CONTAINER
+        value: true
