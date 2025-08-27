@@ -24,5 +24,6 @@ namespace OneWorld.Model
         [MaxLength(10)]
         public string? Gender { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public ICollection<ProductDeveloper> ProductDevelopers { get; set; } = new List<ProductDeveloper>();
     }
 }
