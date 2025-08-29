@@ -37,6 +37,8 @@ namespace OneWorld.Controllers
         {
             if (developerDto == null)
                 return BadRequest("User data is required");
+            if(await context.Developers.AnyAsync(u => u.Email == developerDto.Email))
+                return Conflict("A user with the same email already exists.");
 
             var existingUser = new Developer
             {
@@ -58,7 +60,7 @@ namespace OneWorld.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateDeveloper(Guid userId, DeveloperDto developerDto)
         {
-            var existingUser = await context.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
+            var existingUser = await context.Developers.FindAsync(userId);
             if (existingUser == null)
                 return NotFound();
             existingUser.Email = developerDto.Email;

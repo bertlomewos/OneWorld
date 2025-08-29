@@ -48,7 +48,8 @@ namespace OneWorld.Controllers
                 DownloadUrl = productDto.DownloadUrl,
                 WebsiteUrl = productDto.WebsiteUrl,
                 IconUrl = productDto.IconUrl,
-                DeveloperUserId = productDto.DeveloperUserId
+                DeveloperUserId = productDto.DeveloperUserId,
+                bannerUrl = productDto.bannerUrl
 
             };
             context.Products.Add(newProduct);
@@ -56,7 +57,7 @@ namespace OneWorld.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = newProduct.Id }, newProduct);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, Model.Dto.ProductDto productDto)
+        public async Task<IActionResult> UpdateProduct(Guid id, ProductDto productDto)
         {
             var existingProduct = await context.Products.FindAsync(id);
             if (existingProduct == null)
@@ -66,12 +67,13 @@ namespace OneWorld.Controllers
             existingProduct.DownloadUrl = productDto.DownloadUrl;
             existingProduct.WebsiteUrl = productDto.WebsiteUrl;
             existingProduct.IconUrl = productDto.IconUrl;
+            existingProduct.bannerUrl = productDto.bannerUrl;
             context.Products.Update(existingProduct);
             await context.SaveChangesAsync();
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var existingProduct = await context.Products.FindAsync(id);
             if (existingProduct == null)
