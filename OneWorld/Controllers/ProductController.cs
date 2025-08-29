@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OneWorld.Data;
+using OneWorld.Model.Dto;
 
 namespace OneWorld.Controllers
 {
@@ -9,30 +10,34 @@ namespace OneWorld.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly OneWorldDbContext _logger;
-        public ProductController(OneWorldDbContext logger)
+        private readonly OneWorldDbContext context;
+        public ProductController(OneWorldDbContext context)
         {
-            _logger = logger;
+            this.context = context;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
-                    var products = await _logger.Products
-            .Include(p => p.ProductDevelopers)
-                .ThenInclude(pd => pd.Developer)
-            .ToListAsync();
-                    return Ok(products);
+            return Ok(await context.Products.ToListAsync());
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _logger.Products.FindAsync(id);
+            var product = await context.Products.FindAsync(id);
             if (product == null)
                 return NotFound();
             return Ok(product);
         }
+        [HttpGet("by-developer/{developerId}")]
+        public async Task<IActionResult> GetProductsByDeveloper(Guid developerId)
+        {
+            var products = await context.Products
+                .Where(p => p.DeveloperUserId == developerId)
+                .ToListAsync();
+            return Ok(products);
+        }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Model.Dto.ProductDto productDto)
+        public async Task<IActionResult> CreateProduct(ProductDto productDto)
         {
             if (productDto == null)
                 return BadRequest("Product data is required");
@@ -42,23 +47,18 @@ namespace OneWorld.Controllers
                 Description = productDto.Description,
                 DownloadUrl = productDto.DownloadUrl,
                 WebsiteUrl = productDto.WebsiteUrl,
-                IconUrl = productDto.IconUrl
+                IconUrl = productDto.IconUrl,
+                DeveloperUserId = productDto.DeveloperUserId
+
             };
-            _logger.Products.Add(newProduct);
-            await _logger.SaveChangesAsync();
-            var productDeveloper = new Model.ProductDeveloper
-            {
-                ProductId = newProduct.Id,
-                DeveloperId = productDto.DeveloperId
-            };
-            _logger.ProductDevelopers.Add(productDeveloper);
-            await _logger.SaveChangesAsync();
+            context.Products.Add(newProduct);
+            await context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetProduct), new { id = newProduct.Id }, newProduct);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, Model.Dto.ProductDto productDto)
         {
-            var existingProduct = await _logger.Products.FindAsync(id);
+            var existingProduct = await context.Products.FindAsync(id);
             if (existingProduct == null)
                 return NotFound();
             existingProduct.Name = productDto.Name;
@@ -66,18 +66,18 @@ namespace OneWorld.Controllers
             existingProduct.DownloadUrl = productDto.DownloadUrl;
             existingProduct.WebsiteUrl = productDto.WebsiteUrl;
             existingProduct.IconUrl = productDto.IconUrl;
-            _logger.Products.Update(existingProduct);
-            await _logger.SaveChangesAsync();
+            context.Products.Update(existingProduct);
+            await context.SaveChangesAsync();
             return NoContent();
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var existingProduct = await _logger.Products.FindAsync(id);
+            var existingProduct = await context.Products.FindAsync(id);
             if (existingProduct == null)
                 return NotFound();
-            _logger.Products.Remove(existingProduct);
-            await _logger.SaveChangesAsync();
+            context.Products.Remove(existingProduct);
+            await context.SaveChangesAsync();
             return NoContent();
         }
 

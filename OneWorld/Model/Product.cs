@@ -14,8 +14,11 @@ namespace OneWorld.Model
         public string? DownloadUrl { get; set; }
         public string? WebsiteUrl { get; set; }
         public string? IconUrl { get; set; }
+        public string? bannerUrl { get; set; }
+        [Required]
+        public Guid DeveloperUserId { get; set; }
+        public virtual Developer DeveloperUser { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public ICollection<ProductDeveloper> ProductDevelopers { get; set; } = new List<ProductDeveloper>();
     }
 }
 

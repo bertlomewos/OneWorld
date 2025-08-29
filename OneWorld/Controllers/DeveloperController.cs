@@ -11,21 +11,21 @@ namespace OneWorld.Controllers
     [ApiController]
     public class DeveloperController : ControllerBase
     {
-        private readonly OneWorldDbContext _logger;
-        public DeveloperController(OneWorldDbContext logger)
+        private readonly OneWorldDbContext context;
+        public DeveloperController(OneWorldDbContext context)
         {
-            _logger = logger;
+            this.context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllDevelopers()
         {
-            return Ok(await _logger.Developers.ToListAsync());
+            return Ok(await context.Developers.ToListAsync());
         }
         [HttpGet("{userId}")]
         public async Task<ActionResult<Developer>> GetUser(Guid userId)
         {
-            var developer = await _logger.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
+            var developer = await context.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (developer == null)
                 return NotFound();
@@ -51,14 +51,14 @@ namespace OneWorld.Controllers
                 Age = developerDto.Age,
                 Gender = developerDto.Gender
             };
-            _logger.Developers.Add(existingUser);
-            await _logger.SaveChangesAsync();
+            context.Developers.Add(existingUser);
+            await context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetUser), new { userId = existingUser.UserId }, existingUser);
         }
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateDeveloper(Guid userId, DeveloperDto developerDto)
         {
-            var existingUser = await _logger.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
+            var existingUser = await context.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
             if (existingUser == null)
                 return NotFound();
             existingUser.Email = developerDto.Email;
@@ -70,17 +70,17 @@ namespace OneWorld.Controllers
             existingUser.LastName = developerDto.LastName;
             existingUser.Age = developerDto.Age;
             existingUser.Gender = developerDto.Gender;
-            await _logger.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return NoContent();
         }
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteDeveloper(Guid userId)
         {
-            var existingUser = await _logger.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
+            var existingUser = await context.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
             if (existingUser == null)
                 return NotFound();
-            _logger.Developers.Remove(existingUser);
-            await _logger.SaveChangesAsync();
+            context.Developers.Remove(existingUser);
+            await context.SaveChangesAsync();
             return NoContent();
         }
     }

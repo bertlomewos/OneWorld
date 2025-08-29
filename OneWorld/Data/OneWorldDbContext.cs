@@ -7,6 +7,5 @@ namespace OneWorld.Data
         public OneWorldDbContext(DbContextOptions<OneWorldDbContext> options) : base(options) { }
         public DbSet<Developer> Developers => Set<Developer>();
         public DbSet<Product> Products => Set<Product>();
-        public DbSet<ProductDeveloper> ProductDevelopers => Set<ProductDeveloper>();
     }
 }
