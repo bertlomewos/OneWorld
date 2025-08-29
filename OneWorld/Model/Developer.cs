@@ -5,8 +5,6 @@ namespace OneWorld.Model
     public class Developer
     {
         [Key]
-        public int Id { get; set; }
-        [Required]
         public required Guid UserId { get; set; }
         [Required]
         [EmailAddress]

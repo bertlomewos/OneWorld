@@ -21,7 +21,7 @@ namespace OneWorld.Controllers
             return Ok(await context.Products.ToListAsync());
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct(int id)
+        public async Task<IActionResult> GetProduct(Guid id)
         {
             var product = await context.Products.FindAsync(id);
             if (product == null)

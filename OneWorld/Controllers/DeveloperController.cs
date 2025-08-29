@@ -25,7 +25,7 @@ namespace OneWorld.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<Developer>> GetUser(Guid userId)
         {
-            var developer = await context.Developers.FirstOrDefaultAsync(u => u.UserId == userId);
+            var developer = await context.Developers.FindAsync(userId);
 
             if (developer == null)
                 return NotFound();
